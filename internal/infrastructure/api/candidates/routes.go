@@ -19,6 +19,7 @@ func RegisterRoutes(e *gin.Engine, db *sql.DB) {
 
 	// Registra las rutas candidates
 	e.POST("/candidates/", Handler.postCanditates())
+
 	// e.GET("/candidates/:id", Handler.getUsers())
 	// e.PUT("/candidates/:id", Handler.putUsers())
 	// e.DELETE("/candidates/:id", Handler.deleteUsers())
