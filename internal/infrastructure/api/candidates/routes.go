@@ -10,18 +10,13 @@ import (
 )
 
 func RegisterRoutes(e *gin.Engine, db *sql.DB) {
-
 	Repository := repository.NewBdRepository(db)
-
 	Service := services.NewService(Repository)
-
 	Handler := newHandler(Service, Repository)
-
 	// Registra las rutas candidates
 	e.POST("/candidates/", Handler.postCanditates())
-
-	// e.GET("/candidates/:id", Handler.getUsers())
-	// e.PUT("/candidates/:id", Handler.putUsers())
-	// e.DELETE("/candidates/:id", Handler.deleteUsers())
+	e.GET("/candidates/:id", Handler.getCandidates())
+	e.PUT("/candidates/:id", Handler.putCandidates())
+	e.DELETE("/candidates/:id", Handler.deleteCandidates())
 
 }

@@ -18,9 +18,11 @@ type GetCandidate struct {
 }
 
 type UpdateCandidate struct {
-	Id             string  `json:"id"`
-	Name           string  `json:"name"`
-	Email          string  `json:"email"`
-	Gender         string  `json:"gender"`
-	SalaryExpected float64 `json:"salary_expected"`
+	Id              string  `json:"id"`
+	Name            string  `json:"name"`
+	Email           string  `json:"email"`
+	Gender          string  `json:"gender"`
+	SalaryExpected  float64 `json:"salary_expected"`
+	Phone           string  `json:"phone"`
+	ExperienceYears int     `json:"experience_years"`
 }

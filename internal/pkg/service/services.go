@@ -45,70 +45,70 @@ func (r *Repository) CreateCandidate(ctx *gin.Context, request *model.CreateCand
 
 }
 
-// func (r *Repository) SelectUser(ctx *gin.Context, request *model.GetUser) (*entity.Response, error) {
+func (r *Repository) SelectCandidate(ctx *gin.Context, request *model.GetCandidate) (*entity.Response, error) {
 
-// 	resp, err := r.repo.SelectUser(ctx, request)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	resp, err := r.repo.SelectCandidate(ctx, request)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &entity.Response{
-// 		Data: resp,
-// 		Result: entity.Result{
-// 			Details: []entity.Detail{
-// 				{
-// 					InternalCode: strconv.Itoa(http.StatusOK),
-// 					Message:      http.StatusText(http.StatusOK),
-// 					Detail:       "Registro Seleccionado",
-// 				},
-// 			},
-// 			Source: "Select User",
-// 		},
-// 	}, nil
+	return &entity.Response{
+		Data: resp,
+		Result: entity.Result{
+			Details: []entity.Detail{
+				{
+					InternalCode: strconv.Itoa(http.StatusOK),
+					Message:      http.StatusText(http.StatusOK),
+					Detail:       "Registro Seleccionado",
+				},
+			},
+			Source: "Select Candidate",
+		},
+	}, nil
 
-// }
+}
 
-// func (r *Repository) UpdateUser(ctx *gin.Context, request *model.UpdateUser) (*entity.Response, error) {
+func (r *Repository) UpdateCandidate(ctx *gin.Context, request *model.UpdateCandidate) (*entity.Response, error) {
 
-// 	resp, err := r.repo.UpdateUser(ctx, request)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	resp, err := r.repo.UpdateCandidate(ctx, request)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &entity.Response{
-// 		Data: resp,
-// 		Result: entity.Result{
-// 			Details: []entity.Detail{
-// 				{
-// 					InternalCode: strconv.Itoa(http.StatusOK),
-// 					Message:      http.StatusText(http.StatusOK),
-// 					Detail:       "Registro Actualizado",
-// 				},
-// 			},
-// 			Source: "Update User",
-// 		},
-// 	}, nil
+	return &entity.Response{
+		Data: resp,
+		Result: entity.Result{
+			Details: []entity.Detail{
+				{
+					InternalCode: strconv.Itoa(http.StatusOK),
+					Message:      http.StatusText(http.StatusOK),
+					Detail:       "Registro Actualizado",
+				},
+			},
+			Source: "Update Candidate",
+		},
+	}, nil
 
-// }
+}
 
-// func (r *Repository) DeleteUser(ctx *gin.Context, request *model.DeleteUser) (*entity.Response, error) {
+func (r *Repository) DeleteCandidate(ctx *gin.Context, request *model.DeleteCandidate) (*entity.Response, error) {
 
-// 	err := r.repo.DeleteUser(ctx, request)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	err := r.repo.DeleteCandidate(ctx, request)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &entity.Response{
-// 		Result: entity.Result{
-// 			Details: []entity.Detail{
-// 				{
-// 					InternalCode: strconv.Itoa(http.StatusOK),
-// 					Message:      http.StatusText(http.StatusOK),
-// 					Detail:       "Registro Eliminado",
-// 				},
-// 			},
-// 			Source: "Delete User",
-// 		},
-// 	}, nil
+	return &entity.Response{
+		Result: entity.Result{
+			Details: []entity.Detail{
+				{
+					InternalCode: strconv.Itoa(http.StatusOK),
+					Message:      http.StatusText(http.StatusOK),
+					Detail:       "Registro Eliminado",
+				},
+			},
+			Source: "Delete Candidate",
+		},
+	}, nil
 
-// }
+}

@@ -17,15 +17,19 @@ type Detail struct {
 }
 
 type CandidatesGetResponse struct {
-	Name           string  `json:"name"`
-	Email          string  `json:"email"`
-	Gender         string  `json:"gender"`
-	SalaryExpected float64 `json:"salary_expected"`
+	Name            string  `json:"name" binding:"required"`
+	Email           string  `json:"email" binding:"required,email"`
+	Gender          string  `json:"gender" binding:"required,oneof=Male Female Other"`
+	SalaryExpected  float64 `json:"salary_expected" binding:"required"`
+	Phone           string  `json:"phone" binding:"required"`
+	ExperienceYears int     `json:"experience_years" binding:"required"`
 }
 
 type CandidatesUpdateResponse struct {
-	Name           string  `json:"name"`
-	Email          string  `json:"email"`
-	Gender         string  `json:"gender"`
-	SalaryExpected float64 `json:"salary_expected"`
+	Name            string  `json:"name" binding:"required"`
+	Email           string  `json:"email" binding:"required,email"`
+	Gender          string  `json:"gender" binding:"required,oneof=Male Female Other"`
+	SalaryExpected  float64 `json:"salary_expected" binding:"required"`
+	Phone           string  `json:"phone" binding:"required"`
+	ExperienceYears int     `json:"experience_years" binding:"required"`
 }

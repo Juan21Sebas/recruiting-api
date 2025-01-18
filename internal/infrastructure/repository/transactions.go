@@ -2,6 +2,8 @@ package repository
 
 import (
 	"RECRUITING-API/internal/pkg/entity/model"
+	"RECRUITING-API/internal/pkg/entity/schema"
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -35,7 +37,7 @@ func (p *BDRepository) CreateCandidate(ctx *gin.Context, request *model.CreateCa
 		request.Gender,
 		request.SalaryExpected,
 		request.Phone,
-		"PENDING", // Estado inicial por defecto
+		"PENDING",
 		request.ExperienceYears,
 		now,
 		now,
@@ -44,11 +46,124 @@ func (p *BDRepository) CreateCandidate(ctx *gin.Context, request *model.CreateCa
 		return 0, fmt.Errorf("error creating candidate: %w", err)
 	}
 
-	// Obtener el ID generado automáticamente
 	id, err := result.LastInsertId()
 	if err != nil {
 		return 0, fmt.Errorf("error getting inserted id: %w", err)
 	}
 
 	return id, nil
+}
+
+func (p *BDRepository) SelectCandidate(ctx *gin.Context, request *model.GetCandidate) (*schema.CandidatesGetResponse, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	query := `
+        SELECT 
+            name,
+            email,
+            gender,
+            salary_expected,
+            phone,
+            experience_years
+        FROM candidates
+        WHERE id = ?
+    `
+
+	var candidate schema.CandidatesGetResponse
+	err := p.db.QueryRow(query, request.Id).Scan(
+		&candidate.Name,
+		&candidate.Email,
+		&candidate.Gender,
+		&candidate.SalaryExpected,
+		&candidate.Phone,
+		&candidate.ExperienceYears,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("candidate not found with id: %d", request.Id)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("error querying candidate: %w", err)
+	}
+
+	return &candidate, nil
+}
+
+func (p *BDRepository) UpdateCandidate(ctx *gin.Context, request *model.UpdateCandidate) (*schema.CandidatesUpdateResponse, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	now := time.Now().UTC()
+
+	query := `
+		UPDATE candidates 
+		SET 
+			name = ?,
+			email = ?,
+			gender = ?,
+			salary_expected = ?,
+			phone = ?,
+			experience_years = ?,
+			updated_at = ?
+		WHERE id = ?
+	`
+
+	result, err := p.db.Exec(
+		query,
+		request.Name,
+		request.Email,
+		request.Gender,
+		request.SalaryExpected,
+		request.Phone,
+		request.ExperienceYears,
+		now,
+		request.Id,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("error updating candidate: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return nil, fmt.Errorf("error getting rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return nil, fmt.Errorf("candidate not found with id: %s", request.Id)
+	}
+
+	updatedCandidate := &schema.CandidatesUpdateResponse{
+		Name:            request.Name,
+		Email:           request.Email,
+		Gender:          request.Gender,
+		SalaryExpected:  request.SalaryExpected,
+		Phone:           request.Phone,
+		ExperienceYears: request.ExperienceYears,
+	}
+
+	return updatedCandidate, nil
+}
+
+func (p *BDRepository) DeleteCandidate(ctx *gin.Context, request *model.DeleteCandidate) error {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	query := `DELETE FROM candidates WHERE id = ?`
+
+	result, err := p.db.Exec(query, request.Id)
+	if err != nil {
+		return fmt.Errorf("error deleting candidate: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error getting rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("candidate not found with id: %s", request.Id)
+	}
+
+	return nil
 }
