@@ -1,12 +1,69 @@
 openapi: 3.0.3
 info:
-  title: Swagger OperationQuasarFire
+  title: Swagger Recruiting API - Sistema de Gestión de Candidatos
   description: |-
 
-    Servicio encargado de desifrar el mensaje y triangular la posición de una nave perdida respecto a tres satelites. El servicio recibe la información de los tres satelites y retorna la fuente y contenido del mensaje de auxilio.
-    
+    A robust and scalable system developed in Go for managing candidates in selection and hiring processes. Implemented with hexagonal architecture and following Domain-Driven Design (DDD) principles, it offers a complete solution for candidate lifecycle management.
+
+    Key Features:
+      Candidate Management
+     - Complete CRUD operations for candidates
+     - Extensive fields including: ID, name, email, gender, expected salary, etc.
+     - Robust data validations
+     - Selection process status handling
+
+    Architecture & Technology
+     - Hexagonal Architecture (Ports & Adapters)
+     - Gin Framework for REST APIs
+     - MySQL database
+     - Flyway for migration management
+     - JWT Authentication
+     - Complete unit and integration tests
+
+    Application Layers
+     - **Domain**: Core business models and logic
+     - **Repository**: Data access and persistence
+     - **Services**: Business logic implementation
+     - **API**: Secure and documented REST endpoints
+
+    Security
+     - JWT Authentication
+     - Protected routes
+     - Role and permission validation
+     - Secure handling of sensitive information
+
+    Database
+     - Automated migrations with Flyway
+     - Preconfigured test data
+     - Optimized indexes
+     - Data integrity constraints
+
+    Documentation & Testing
+     - Swagger/OpenAPI for endpoint documentation
+     - Postman collection with examples
+     - Unit tests with >80% coverage
+     - Mocks for isolated testing
+
+    Code Quality
+     - SOLID principles
+     - Clean Code
+     - Robust error handling
+     - Structured logging
+     - Clear and useful comments
+
+    Technologies Used
+     - Go 1.21+
+     - Gin Web Framework
+     - MySQL 8.0
+     - Flyway
+     - JWT
+     - Testify/Mockery
+     - Swagger
+     - Docker
+
+    This project demonstrates best practices in REST API development with Go, providing a solid and extensible foundation for candidate management systems.    
     Links Utiles:
-    - [The OperationQuasarFire repository](https://github.com/Juan21Sebas/FuegoDeQuasar)
+    - [The Recruiting Repository](https://github.com/Juan21Sebas/recruiting-api)
     
   termsOfService: http://swagger.io/terms/
   contact:
@@ -14,26 +71,26 @@ info:
   version: 1.0.0
 
 tags:
-  - name: OperationQuasarFire
-    description: Everything about your Starship
+  - name: Recruiting
+    description: All about candidate creation.
     externalDocs:
       description: Find out more
       url: http://swagger.io
 
 paths:
-  /CreateTopSecret:
+  /candidates:
     post:
       tags:
-        - OperationQuasarFire
-      summary: agrega un nuevo Satelite
-      description: Recibe un arreglo de 3 satelites con nombre, distancia y mensaje. Triangula la distancia respecto a cada satelite y decifra el mensaje.
-      operationId: addStarshipCommsResolver
+        - candidates
+      summary: add new candidate
+      description: Allows candidate to create a new candidate by providing a name, email, gender, salary expected, phone and experience years.
+      operationId: addCandidates
       requestBody:
-        description: Crea un nuevo satelite
+        description: Create new candidate
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Satellite'
+              $ref: '#/components/schemas/addCandidate'
         required: true
       responses:
         '200':
@@ -41,23 +98,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Satellite200'          
+                $ref: '#/components/schemas/addUser200'          
         '405':
           description: Invalid input
           
-  /TopSecret_Split/NOM_SATELITE:
-    post:
+  /candidates/id:
+    get:
       tags:
-        - OperationQuasarFire
-      summary: Recibe informacion de un satelite
-      description: Recibe la distancia y mensaje de un solo satelite, lo acomula en un arreglo hasta tener la infromación de tres satelites distintos.
-      operationId: addStarshipCommsResolverS
+        - candidates
+      summary: select candidate
+      description: The API should allow users to get details about a specific task using its ID.
+      operationId: selectCandidate
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/selectUser200'          
+        '405':
+          description: Invalid input  
+  
+  /candidates/ids:
+    put:
+      tags:
+        - candidates
+      summary: update candidates
+      description: Users must be able to update the name, email, gender, salary expected, phone and experience years.
+      operationId: putCandidates
       requestBody:
-        description: Recibe informacion de un satelite
+        description: update new Candidates
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SatelliteS'
+              $ref: '#/components/schemas/updateCandidate'
         required: true
       responses:
         '200':
@@ -65,59 +139,80 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SatelliteS200'          
+                $ref: '#/components/schemas/updateUser200'          
         '405':
-          description: Invalid input        
+          description: Invalid input       
   
-  /GetTopSecret:
-    get:
+  /candidates/:id:
+    delete:
       tags:
-        - OperationQuasarFire
-      summary: consulta un  Satelite
-      description: Recibe un arreglo de 3 satelites con nombre, distancia y mensaje. Triangula la distancia respecto a cada satelite y decifra el mensaje.
-      operationId: addStarshipCommsResolverG
+        - candidates
+      summary: delete candidates
+      description: Users should be able to delete a task using their ID.
+      operationId: deleteCandidates
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Satellite200'          
+                $ref: '#/components/schemas/deleteUser200'          
         '405':
-          description: Invalid input  
+          description: Invalid input 
           
 components:
   schemas:
-    Satellite:
+    addCandidate:
       type: object
       properties:
         name:
           type: string
-          example: kenobi
-        distance:
-          type: number
-          example: 100
-        message:
-          type: array
-          items:
-            type: string   
-            example: este mensaje
-            
-    Satellite200:
+          example: Nombre del Usuario
+        email:
+          type: string
+          example: Email del Usuario
+        gender:
+          type: string
+          example: genero
+        Salary Expected:
+          type: integer
+          example: 12000000  
+        Phone:
+          type: string
+          example: 3204287506 
+        Experience Years:
+          type: integer
+          example: 5   
+          
+    updateCandidate:
       type: object
       properties:
-        position:
-            type: object  
-            properties: 
-              x:
-                  type: string
-                  example: 261.41962
-              y:
-                  type: string
-                  example: 1105.2816
-              message:
-                  type: string 
-                  example: este es un mensaje secreto
+        name:
+          type: string
+          example: Cambio
+        email:
+          type: string
+          example: Cambio
+        gender:
+          type: string
+          example: Cambio
+        Salary Expected:
+          type: integer
+          example: 0  
+        Phone:
+          type: string
+          example: Cambio
+        Experience Years:
+          type: integer
+          example: 0  
+    
+          
+    addUser200:
+      type: object
+      properties:
+        data:
+            type: string  
+            example: Su ID es 1
         result:
             type: object  
             properties: 
@@ -129,25 +224,92 @@ components:
                   example: Ok
               Detail:
                   type: string
-                  example: ""
-                  
+                  example: "Registro Creado"
               source:
                   type: string 
-                  example: Find position to message
-        
-    SatelliteS:
+                  example: Create Candidate
+                  
+    selectUser200:
       type: object
       properties:
-        distance:
-          type: number
-          example: 100
-        message:
-          type: array
-          items:
-            type: string   
-            example: este mensaje
-            
-    SatelliteS200:
+        data:
+          type: object  
+          properties: 
+            name:
+              type: string
+              example: Nombre del Usuario
+            email:
+              type: string
+              example: Email del Usuario
+            gender:
+              type: string
+              example: genero
+            Salary Expected:
+              type: integer
+              example: 12000000  
+            Phone:
+              type: string
+              example: 3204287506 
+            Experience Years:
+              type: integer
+              example: 5   
+        result:
+            type: object  
+            properties: 
+              intercode:
+                  type: string
+                  example: 200
+              message:
+                  type: string
+                  example: Ok
+              Detail:
+                  type: string
+                  example: "Registro Seleccionado"
+              source:
+                  type: string 
+                  example: Select Candidate  
+                  
+    updateUser200:
+      type: object
+      properties:
+        data:
+          type: object  
+          properties: 
+            name:
+              type: string
+              example: Cambio
+            email:
+              type: string
+              example: Cambio
+            gender:
+              type: string
+              example: Cambio
+            salary Expected:
+              type: integer
+              example: 0  
+            phone:
+              type: string
+              example: Cambio
+            experience Years:
+              type: integer
+              example: 0  
+        result:
+            type: object  
+            properties: 
+              intercode:
+                  type: string
+                  example: 200
+              message:
+                  type: string
+                  example: Ok
+              Detail:
+                  type: string
+                  example: "Registro Actualizado"
+              source:
+                  type: string 
+                  example: Update User  
+                  
+    deleteUser200:
       type: object
       properties:
         result:
@@ -161,8 +323,7 @@ components:
                   example: Ok
               Detail:
                   type: string
-                  example: ""
-                  
+                  example: "Registro Eliminado"
               source:
                   type: string 
-                  example: Find position to message
+                  example: Delete Candidate  
