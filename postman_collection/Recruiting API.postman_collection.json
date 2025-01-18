@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "2f9191c9-20b7-4656-a754-1d0f3b935e5a",
+		"name": "Recruiting API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23266366"
+	},
+	"item": [
+		{
+			"name": "Local",
+			"item": [
+				{
+					"name": "Candidates",
+					"item": [
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "mi_token_secreto",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8089/candidates/6",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"candidates",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "mi_token_secreto",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Cambio\",\n    \"email\": \"cambio@prueba.com\",\n    \"gender\": \"Female\",     \n    \"salary_expected\": 12000000,\n    \"phone\": \"+57 3204876459\", \n    \"experience_years\": 10      \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8089/candidates/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"candidates",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "mi_token_secreto",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Sebastian\",\n    \"email\": \"sebas@prueba.com\",\n    \"gender\": \"Male\",     \n    \"salary_expected\": 12000000,\n    \"phone\": \"+57 3001234567\", \n    \"experience_years\": 5      \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8089/candidates/",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"candidates",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Select",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "mi_token_secreto",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8089/candidates/6",
+									"host": [
+										"localhost"
+									],
+									"port": "8089",
+									"path": [
+										"candidates",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Deploy",
+			"item": [
+				{
+					"name": "Candidates",
+					"item": []
+				}
+			]
+		}
+	]
+}
