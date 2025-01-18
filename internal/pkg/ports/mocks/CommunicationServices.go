@@ -16,12 +16,12 @@ type CommunicationServices struct {
 	mock.Mock
 }
 
-// CreateCandidates provides a mock function with given fields: ctx, request
-func (_m *CommunicationServices) CreateCandidates(ctx *gin.Context, request *model.CreateCandidate) (*schema.Response, error) {
+// CreateCandidate provides a mock function with given fields: ctx, request
+func (_m *CommunicationServices) CreateCandidate(ctx *gin.Context, request *model.CreateCandidate) (*schema.Response, error) {
 	ret := _m.Called(ctx, request)
 
 	if len(ret) == 0 {
-		panic("no return value specified for CreateCandidates")
+		panic("no return value specified for CreateCandidate")
 	}
 
 	var r0 *schema.Response
@@ -46,12 +46,12 @@ func (_m *CommunicationServices) CreateCandidates(ctx *gin.Context, request *mod
 	return r0, r1
 }
 
-// DeleteCandidates provides a mock function with given fields: ctx, request
-func (_m *CommunicationServices) DeleteCandidates(ctx *gin.Context, request *model.DeleteCandidate) (*schema.Response, error) {
+// DeleteCandidate provides a mock function with given fields: ctx, request
+func (_m *CommunicationServices) DeleteCandidate(ctx *gin.Context, request *model.DeleteCandidate) (*schema.Response, error) {
 	ret := _m.Called(ctx, request)
 
 	if len(ret) == 0 {
-		panic("no return value specified for DeleteCandidates")
+		panic("no return value specified for DeleteCandidate")
 	}
 
 	var r0 *schema.Response
@@ -76,12 +76,12 @@ func (_m *CommunicationServices) DeleteCandidates(ctx *gin.Context, request *mod
 	return r0, r1
 }
 
-// SelectCandidates provides a mock function with given fields: ctx, request
-func (_m *CommunicationServices) SelectCandidates(ctx *gin.Context, request *model.GetCandidate) (*schema.Response, error) {
+// SelectCandidate provides a mock function with given fields: ctx, request
+func (_m *CommunicationServices) SelectCandidate(ctx *gin.Context, request *model.GetCandidate) (*schema.Response, error) {
 	ret := _m.Called(ctx, request)
 
 	if len(ret) == 0 {
-		panic("no return value specified for SelectCandidates")
+		panic("no return value specified for SelectCandidate")
 	}
 
 	var r0 *schema.Response
@@ -106,12 +106,12 @@ func (_m *CommunicationServices) SelectCandidates(ctx *gin.Context, request *mod
 	return r0, r1
 }
 
-// UpdateCandidates provides a mock function with given fields: ctx, request
-func (_m *CommunicationServices) UpdateCandidates(ctx *gin.Context, request *model.UpdateCandidate) (*schema.Response, error) {
+// UpdateCandidate provides a mock function with given fields: ctx, request
+func (_m *CommunicationServices) UpdateCandidate(ctx *gin.Context, request *model.UpdateCandidate) (*schema.Response, error) {
 	ret := _m.Called(ctx, request)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateCandidates")
+		panic("no return value specified for UpdateCandidate")
 	}
 
 	var r0 *schema.Response
