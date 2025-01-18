@@ -56,6 +56,19 @@ func runMigrations(db *sql.DB) error {
 		return fmt.Errorf("migrations directory does not exist: %s", migrationsDir)
 	}
 
+	// Obtener la versión actual
+	version, err := goose.GetDBVersion(db)
+	if err != nil {
+		return fmt.Errorf("error getting database version: %v", err)
+	}
+
+	// Si hay una versión existente, hacer reset
+	if version > 0 {
+		if err := goose.Reset(db, migrationsDir); err != nil {
+			return fmt.Errorf("error resetting migrations: %v", err)
+		}
+	}
+
 	// Ejecutar las migraciones
 	if err := goose.Up(db, migrationsDir); err != nil {
 		return fmt.Errorf("error running migrations: %v", err)

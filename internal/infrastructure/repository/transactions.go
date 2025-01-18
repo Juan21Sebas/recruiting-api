@@ -81,7 +81,7 @@ func (p *BDRepository) SelectCandidate(ctx *gin.Context, request *model.GetCandi
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("candidate not found with id: %d", request.Id)
+		return nil, fmt.Errorf("candidate not found with id: %s", request.Id)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("error querying candidate: %w", err)

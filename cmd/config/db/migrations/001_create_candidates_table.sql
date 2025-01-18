@@ -1,6 +1,10 @@
 -- 001_create_candidates_table.sql
 -- +goose Up
 -- +goose StatementBegin
+DROP TABLE IF EXISTS candidates;
+-- +goose StatementEnd
+
+-- +goose StatementBegin
 CREATE TABLE candidates (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,

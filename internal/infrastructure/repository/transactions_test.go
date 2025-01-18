@@ -1,39 +1,213 @@
 package repository
 
-// import (
-// 	"errors"
-// 	"testing"
+import (
+	"errors"
+	"net/http/httptest"
+	"testing"
 
-// 	"RECRUITING-API/internal/pkg/entity"
+	"RECRUITING-API/internal/pkg/entity/model"
 
-// 	"github.com/DATA-DOG/go-sqlmock"
-// )
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+)
 
-// func TestBDRepository_Create_Error(t *testing.T) {
+func TestCreateCandidate(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Error creating mock db: %v", err)
+	}
+	defer db.Close()
+
+	repo := &BDRepository{
+		db: db,
+	}
+
+	t.Run("success case", func(t *testing.T) {
+		request := &model.CreateCandidate{
+			Name:            "John Doe",
+			Email:           "john@example.com",
+			Gender:          "Male",
+			SalaryExpected:  50000.00,
+			Phone:           "+1234567890",
+			ExperienceYears: 5,
+		}
+
+		mock.ExpectExec("INSERT INTO candidates").
+			WithArgs(
+				request.Name,
+				request.Email,
+				request.Gender,
+				request.SalaryExpected,
+				request.Phone,
+				"PENDING",
+				request.ExperienceYears,
+				sqlmock.AnyArg(),
+				sqlmock.AnyArg(),
+			).
+			WillReturnResult(sqlmock.NewResult(123, 1))
+
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		id, err := repo.CreateCandidate(c, request)
+
+		assert.NoError(t, err)
+		assert.Equal(t, int64(123), id)
+	})
+
+	t.Run("error case - db error", func(t *testing.T) {
+		request := &model.CreateCandidate{
+			Name: "John Doe",
+			// ... otros campos
+		}
+
+		mock.ExpectExec("INSERT INTO candidates").
+			WillReturnError(errors.New("db error"))
+
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		_, err := repo.CreateCandidate(c, request)
+
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "error creating candidate")
+	})
+}
+
+// func TestSelectCandidate(t *testing.T) {
 // 	db, mock, err := sqlmock.New()
 // 	if err != nil {
-// 		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+// 		t.Fatalf("Error creating mock db: %v", err)
 // 	}
 // 	defer db.Close()
 
-// 	repo := BDRepository{db}
-
-// 	satellites := []entity.Satellite{
-// 		{Name: "satellite1", Distance: 100, Message: []string{"message1", "message2"}},
-// 		{Name: "satellite2", Distance: 200, Message: []string{"message3", "message4"}},
+// 	repo := &BDRepository{
+// 		db: db,
 // 	}
 
-// 	mock.ExpectPrepare("INSERT INTO Satellites").WillReturnError(errors.New("error preparing statement"))
+// 	t.Run("success case", func(t *testing.T) {
+// 		expectedCandidate := &schema.CandidatesGetResponse{
+// 			Name:            "John Doe",
+// 			Email:           "john@example.com",
+// 			Gender:          "Male",
+// 			SalaryExpected:  50000.00,
+// 			Phone:           "+1234567890",
+// 			ExperienceYears: 5,
+// 		}
 
-// 	request := &entity.SatelliteRequest{Satellites: satellites}
+// 		rows := sqlmock.NewRows([]string{"name", "email", "gender", "salary_expected", "phone", "experience_years"}).
+// 			AddRow(expectedCandidate.Name, expectedCandidate.Email, expectedCandidate.Gender,
+// 				expectedCandidate.SalaryExpected, expectedCandidate.Phone, expectedCandidate.ExperienceYears)
 
-// 	_, err = repo.Create(request)
+// 		mock.ExpectQuery("SELECT (.+) FROM candidates").
+// 			WithArgs(123).
+// 			WillReturnRows(rows)
 
-// 	if err == nil {
-// 		t.Error("Expected error, but got nil")
-// 	}
+// 		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+// 		result, err := repo.SelectCandidate(c, &model.GetCandidate{Id: "123"})
 
-// 	if err := mock.ExpectationsWereMet(); err != nil {
-// 		t.Errorf("there were unfulfilled expectations: %s", err)
-// 	}
+// 		assert.NoError(t, err)
+// 		assert.Equal(t, expectedCandidate, result)
+// 	})
+
+// 	t.Run("not found case", func(t *testing.T) {
+// 		mock.ExpectQuery("SELECT (.+) FROM candidates").
+// 			WithArgs(123).
+// 			WillReturnError(sql.ErrNoRows)
+
+// 		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+// 		_, err := repo.SelectCandidate(c, &model.GetCandidate{Id: "123"})
+
+// 		assert.Error(t, err)
+// 		assert.Contains(t, err.Error(), "candidate not found")
+// 	})
 // }
+
+func TestUpdateCandidate(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Error creating mock db: %v", err)
+	}
+	defer db.Close()
+
+	repo := &BDRepository{
+		db: db,
+	}
+
+	t.Run("success case", func(t *testing.T) {
+		request := &model.UpdateCandidate{
+			Id:              "123",
+			Name:            "John Updated",
+			Email:           "john.updated@example.com",
+			Gender:          "Male",
+			SalaryExpected:  60000.00,
+			Phone:           "+1234567890",
+			ExperienceYears: 6,
+		}
+
+		mock.ExpectExec("UPDATE candidates").
+			WithArgs(
+				request.Name,
+				request.Email,
+				request.Gender,
+				request.SalaryExpected,
+				request.Phone,
+				request.ExperienceYears,
+				sqlmock.AnyArg(),
+				request.Id,
+			).
+			WillReturnResult(sqlmock.NewResult(0, 1))
+
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		result, err := repo.UpdateCandidate(c, request)
+
+		assert.NoError(t, err)
+		assert.Equal(t, request.Name, result.Name)
+		assert.Equal(t, request.Email, result.Email)
+	})
+
+	t.Run("not found case", func(t *testing.T) {
+		request := &model.UpdateCandidate{Id: "123"}
+
+		mock.ExpectExec("UPDATE candidates").
+			WillReturnResult(sqlmock.NewResult(0, 0))
+
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		_, err := repo.UpdateCandidate(c, request)
+
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "candidate not found")
+	})
+}
+
+func TestDeleteCandidate(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Error creating mock db: %v", err)
+	}
+	defer db.Close()
+
+	repo := &BDRepository{
+		db: db,
+	}
+
+	t.Run("success case", func(t *testing.T) {
+		mock.ExpectExec("DELETE FROM candidates").
+			WithArgs("123").
+			WillReturnResult(sqlmock.NewResult(0, 1))
+
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		err := repo.DeleteCandidate(c, &model.DeleteCandidate{Id: "123"})
+
+		assert.NoError(t, err)
+	})
+
+	t.Run("not found case", func(t *testing.T) {
+		mock.ExpectExec("DELETE FROM candidates").
+			WithArgs("123").
+			WillReturnResult(sqlmock.NewResult(0, 0))
+
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		err := repo.DeleteCandidate(c, &model.DeleteCandidate{Id: "123"})
+
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "candidate not found")
+	})
+}
