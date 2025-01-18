@@ -71,55 +71,6 @@ func TestCreateCandidate(t *testing.T) {
 	})
 }
 
-// func TestSelectCandidate(t *testing.T) {
-// 	db, mock, err := sqlmock.New()
-// 	if err != nil {
-// 		t.Fatalf("Error creating mock db: %v", err)
-// 	}
-// 	defer db.Close()
-
-// 	repo := &BDRepository{
-// 		db: db,
-// 	}
-
-// 	t.Run("success case", func(t *testing.T) {
-// 		expectedCandidate := &schema.CandidatesGetResponse{
-// 			Name:            "John Doe",
-// 			Email:           "john@example.com",
-// 			Gender:          "Male",
-// 			SalaryExpected:  50000.00,
-// 			Phone:           "+1234567890",
-// 			ExperienceYears: 5,
-// 		}
-
-// 		rows := sqlmock.NewRows([]string{"name", "email", "gender", "salary_expected", "phone", "experience_years"}).
-// 			AddRow(expectedCandidate.Name, expectedCandidate.Email, expectedCandidate.Gender,
-// 				expectedCandidate.SalaryExpected, expectedCandidate.Phone, expectedCandidate.ExperienceYears)
-
-// 		mock.ExpectQuery("SELECT (.+) FROM candidates").
-// 			WithArgs(123).
-// 			WillReturnRows(rows)
-
-// 		c, _ := gin.CreateTestContext(httptest.NewRecorder())
-// 		result, err := repo.SelectCandidate(c, &model.GetCandidate{Id: "123"})
-
-// 		assert.NoError(t, err)
-// 		assert.Equal(t, expectedCandidate, result)
-// 	})
-
-// 	t.Run("not found case", func(t *testing.T) {
-// 		mock.ExpectQuery("SELECT (.+) FROM candidates").
-// 			WithArgs(123).
-// 			WillReturnError(sql.ErrNoRows)
-
-// 		c, _ := gin.CreateTestContext(httptest.NewRecorder())
-// 		_, err := repo.SelectCandidate(c, &model.GetCandidate{Id: "123"})
-
-// 		assert.Error(t, err)
-// 		assert.Contains(t, err.Error(), "candidate not found")
-// 	})
-// }
-
 func TestUpdateCandidate(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	if err != nil {

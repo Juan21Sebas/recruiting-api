@@ -1,6 +1,4 @@
-// server.go
-
-package starshipcommsresolver
+package candidates
 
 import (
 	"database/sql"
