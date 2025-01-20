@@ -9,11 +9,11 @@ import (
 
 func main() {
 	dbConfig := db.DBConfig{
-		Host:     "localhost",
-		Port:     "3306",
-		Database: "recruiting_db",
-		User:     "juansebastiansanchez",
-		Password: "JuanAdmin123$",
+		Host:     "",
+		Port:     "",
+		Database: "",
+		User:     "",
+		Password: "",
 	}
 
 	database, err := db.NewMySQLDB(dbConfig)

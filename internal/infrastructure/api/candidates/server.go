@@ -1,6 +1,7 @@
 package candidates
 
 import (
+	"RECRUITING-API/internal/infrastructure/api/candidates/middleware"
 	"database/sql"
 	"time"
 
@@ -12,9 +13,9 @@ import (
 func CreateServer(db *sql.DB) *gin.Engine {
 	server := gin.Default()
 
-	// jwtMiddleware := middleware.NewJWTMiddleware("s3cr3tK3yF0rJWT!")
+	jwtMiddleware := middleware.NewJWTMiddleware("")
 
-	// server.Use(jwtMiddleware.MiddlewareFunc)
+	server.Use(jwtMiddleware.MiddlewareFunc)
 
 	server.Use(cors.Middleware(cors.Config{
 		Origins:        "*",

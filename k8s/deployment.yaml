@@ -1,21 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-deployment-quasar-deployment
+  name: recruiting-api-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: operation-quasar
+      app: recruiting-api
   template:
     metadata:
       labels:
-        app: operation-quasar
-        version: v2 
+        app: recruiting-api
     spec:
       containers:
-      - name: app
-        image: ""
-        imagePullPolicy: Always
+      - name: recruiting-api
+        image: us-central1-docker.pkg.dev/recluting-api/comond-resolver/recruiting-api:9.1
         ports:
         - containerPort: 8089
+        env:
+        - name: DB_HOST
+          value: "34.46.192.12"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: "recruiting_db"
+        - name: DB_USER
+          value: "juansebastiansanchez"
+        - name: DB_PASSWORD
+          value: "JuanAdmin123$"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recruiting-api-service
+spec:
+  selector:
+    app: recruiting-api
+  ports:
+    - protocol: TCP
+      port: 8089
+      targetPort: 8089
+  type: LoadBalancer
